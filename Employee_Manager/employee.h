@@ -8,10 +8,9 @@
 using namespace std;
 
 struct Employee {
-    int id;
-    char code[20];
+    int code;
     char name[30];
-    int date;
+    char date[20];
     char adress[20];
     char part[20];
 
@@ -20,11 +19,13 @@ struct Employee {
 typedef Employee Epl;
 
 void printLine(int n);
-void inputEpl(Epl &NV, int id);
-void input(Epl a[], int id, int n);
-void searchEpl(Epl a[], char codeEpl[], int n);
+void inputEpl(Epl &NV);
+void input(Epl a[], int n);
+void searchEpl(Epl a[], int code, int n);
 void showStudent(Epl a[], int n);
 int inputFile(Epl a[], char fileName[]);
 void outputFile(Epl a[], int n, char fileName[]);
 void pressAnyKey();
+void doc();
+void ghi(Epl a[], int n);
 #endif // A_H
