@@ -12,9 +12,19 @@ void inputEpl(Epl &Epl) {
     cout << "\n Enter date: "; fflush(stdin); gets(Epl.date);
     cout << "\n Enter name: "; fflush(stdin); gets(Epl.name);
     cout << "\n Enter code: ";cin>>Epl.code;
-
     cout << "\n Enter adress: "; fflush(stdin); gets(Epl.adress);
+    std::string myAdress = std::string(Epl.adress);
+    string x="";
+    if(myAdress.compare(x)==0){
+        cout<<"\n Enter again:";
+        cout << "\n Enter adress: "; fflush(stdin); gets(Epl.adress);
+    }
     cout << "\n Enter part: "; fflush(stdin); gets(Epl.part);
+    std::string myPart = std::string(Epl.part);
+    if(myPart.compare(x)==0){
+        cout<<"\n Enter again:";
+        cout << "\n Enter adress: "; fflush(stdin); gets(Epl.part);
+    }
 }
 
 void input(Epl a[], int n) {
