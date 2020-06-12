@@ -3,3 +3,6 @@
  <p>Chi tiết các công việc Phong thực hiện:</p> 
  <p>Tuần 1:Viết hàm thêm nhân viên,validate</p>
  <p>Tuần 2:Viết hàm đọc file csv,thêm trạng thái và ngày đi làm.</p>
+ 
+ 
+ <h5>Nếu clone thì anh clone nhánh master về ạ,mấy nhánh kia dữ liệu bị sai</h5>
