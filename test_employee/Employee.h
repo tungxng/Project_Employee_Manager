@@ -1,5 +1,3 @@
-#ifndef A_H
-#define A_H
 #pragma once
 #include <string>
 
@@ -45,5 +43,3 @@ void readCSV(string file);
 void writeFileCsv(string file);
 void pressAnyKey();
 Employee searchChamcong(string file, string id);
-
-#endif // A_H

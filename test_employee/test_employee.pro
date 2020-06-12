@@ -8,4 +8,4 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    employee.h
+    Employee.h
