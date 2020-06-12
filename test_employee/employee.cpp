@@ -277,6 +277,7 @@ void print(Employee e)
 
 }
 void readCSV(string file){
+    //doc file
     Employee e[10000];
     Employee employee;
     ifstream inFile(file, ios::in);
@@ -313,6 +314,7 @@ int checkStatus(string status){
 
 void writeFileCsv(string file)
 {
+    // viet file
     ofstream myfile(file, ios::app);
     if (myfile.is_open())
     {
