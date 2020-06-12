@@ -276,11 +276,77 @@ void print(Employee e)
 
 
 }
+void readCSV(string file){
+    Employee e[10000];
+    Employee employee;
+    ifstream inFile(file, ios::in);
+    string line;
+    int linenum = 0;
+    while (getline (inFile, line))
+    {
+        istringstream linestream(line);
+        string item;
+        //use this to get up to the first comma
+        getline(linestream, item, ',');
+        employee.setId(item);
+        getline(linestream, item, ',');
+        employee.setName(item);
+        getline(linestream, item, ',');
+        employee.setdateofbirth(item);
+        getline(linestream, item, ',');
+        employee.setAdress(item);
+        getline(linestream, item, ',');
+        employee.setdepartment(item);
+        e[linenum] = employee;
+        linenum++;
+    }
+    for (int i=0;i<linenum;i++) {
+        cout<<"\n"<<e[i].getId()<<setw(30)<<e[i].getName()<<setw(25)<<e[i].getdateofbirth()<<setw(35)<<e[i].getAdress()<<setw(20)<<e[i].getdepartment()<<"\n";
+    }
+}
 int checkStatus(string status){
     if(status.compare("DL")==0||status.compare("DLNN")==0||status.compare("N")==0||status.compare("NP")==0){
         return 1;
     }
     return 0;
+}
+
+void writeFileCsv(string file)
+{
+    ofstream myfile(file, ios::app);
+    if (myfile.is_open())
+    {
+        string id;string date;string status;
+
+        cout << "Nhap ma nhan vien (VD:ANLAB_1): ";
+        cin >> id;
+        while(checkId("ImportData.csv", id) == 1) {
+            cout << "Ma nhan vien không ton tai, moi ban nhap lai:  \n";
+            cout << "Nhap ma nhan vien: ";
+            cin >> id;
+        }
+        cout << "Nhap ngay thang nam di lam: \n";
+        getline(cin, date);
+        while (validateDate(date) == 0 || checkDate("ImportData.csv",id,date)==0)
+        {
+            cout << "Moi nhap lai: ";
+            getline(cin, date);
+        }
+
+        cout << "Nhap trang thai : \n";
+        getline(cin, status);
+        while(checkStatus(status) == 0){
+            cout << "Nhap lai trang thai : \n";
+            getline(cin, status);
+        }
+        cout << "-------------------------------------------------" << endl;
+        myfile << id << "," << date << "," << status << endl;
+
+        myfile.close();
+
+
+    }
+
 }
 Employee searchChamcong(string file, string id)
 {
@@ -327,69 +393,4 @@ void pressAnyKey() {
     cout << "\n\nPress any key to continue...";
     getch();
     system("cls");
-}
-void readCSV(string file){
-    Employee e[10000];
-    Employee employee;
-    ifstream inFile(file, ios::in);
-    string line;
-    int linenum = 0;
-    while (getline (inFile, line))
-    {
-        istringstream linestream(line);
-        string item;
-        //use this to get up to the first comma
-        getline(linestream, item, ',');
-        employee.setId(item);
-        getline(linestream, item, ',');
-        employee.setName(item);
-        getline(linestream, item, ',');
-        employee.setdateofbirth(item);
-        getline(linestream, item, ',');
-        employee.setAdress(item);
-        getline(linestream, item, ',');
-        employee.setdepartment(item);
-        e[linenum] = employee;
-        linenum++;
-    }
-    for (int i=0;i<linenum;i++) {
-        cout<<"\n"<<e[i].getId()<<setw(30)<<e[i].getName()<<setw(25)<<e[i].getdateofbirth()<<setw(35)<<e[i].getAdress()<<setw(20)<<e[i].getdepartment()<<"\n";
-    }
-}
-void writeFileCsv(string file)
-{
-    ofstream myfile(file, ios::app);
-    if (myfile.is_open())
-    {
-        string id;string date;string status;
-
-        cout << "Nhap ma nhan vien (VD:ANLAB_1): ";
-        cin >> id;
-        while(checkId("ImportData.csv", id) == 1) {
-            cout << "Ma nhan vien không ton tai, moi ban nhap lai:  \n";
-            cout << "Nhap ma nhan vien: ";
-            cin >> id;
-        }
-        cout << "Nhap ngay thang nam di lam: \n";
-        getline(cin, date);
-        while (validateDate(date) == 0 || checkDate("ImportData.csv",id,date)==0)
-        {
-            cout << "Moi nhap lai: ";
-            getline(cin, date);
-        }
-
-        cout << "Nhap trang thai : \n";
-        getline(cin, status);
-        while(checkStatus(status) == 0){
-            cout << "Nhap lai trang thai : \n";
-            getline(cin, status);
-        }
-        cout << "-------------------------------------------------" << endl;
-        myfile << id << "," << date << "," << status << endl;
-
-        myfile.close();
-
-
-    }
-
 }
