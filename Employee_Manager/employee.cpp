@@ -1,97 +1,331 @@
 #include "employee.h"
-#include<conio.h>
-#include<stdio.h>
 #include <iostream>
-#include <string.h>
-#include<fstream>
-#define MAX 100
-using namespace std;
-
-typedef Employee Epl;
-void inputEpl(Epl &Epl) {
-    cout << "\n Enter date: "; fflush(stdin); gets(Epl.date);
-    cout << "\n Enter name: "; fflush(stdin); gets(Epl.name);
-    cout << "\n Enter code: ";cin>>Epl.code;
-    cout << "\n Enter adress: "; fflush(stdin); gets(Epl.adress);
-    std::string myAdress = std::string(Epl.adress);
-    string x="";
-    if(myAdress.compare(x)==0){
-        cout<<"\n Enter again:";
-        cout << "\n Enter adress: "; fflush(stdin); gets(Epl.adress);
-    }
-    cout << "\n Enter part: "; fflush(stdin); gets(Epl.part);
-    std::string myPart = std::string(Epl.part);
-    if(myPart.compare(x)==0){
-        cout<<"\n Enter again:";
-        cout << "\n Enter adress: "; fflush(stdin); gets(Epl.part);
-    }
+#include <fstream>
+#include <sstream>
+#include <stdlib.h>
+#include <iomanip>
+#include<conio.h>
+Employee::Employee()
+{
+    id = "";
+    name = "";
+    dateofbirth = "";
+    adress = "";
+    department = "";
+    date="";
+    status="";
 }
 
-void input(Epl a[], int n) {
-    printLine(40);
-    printf("\n Enter employee %d:", n + 1);
-    inputEpl(a[n]);
-    printLine(40);
+Employee::Employee(string id, string name, string dateofbirth, string adress, string department,string date,string status)
+{
+    this->id = id;
+    this->name = name;
+    this->dateofbirth = dateofbirth;
+    this->adress = adress;
+    this->department = department;
+    this->date=date;
+    this->status=status;
+}
+
+void Employee::setId(string id)
+{
+    this->id = id;
+}
+void Employee::setName(string name)
+{
+    this->name = name;
+}
+void Employee::setdateofbirth(string dateofbirth)
+{
+    this->dateofbirth = dateofbirth;
+}
+void Employee::setAdress(string adress)
+{
+    this->adress = adress;
+}
+void Employee::setdepartment(string department)
+{
+    this->department = department;
+}
+void Employee::setDate(string date)
+{
+    this->date = date;
+}
+void Employee::setStatus(string status)
+{
+    this->status = status;
+}
+
+string Employee::getId()
+{
+    return this->id;
+}
+string Employee::getdateofbirth()
+{
+    return this->dateofbirth;
+}
+string Employee::getAdress()
+{
+    return this->adress;
+}
+string Employee::getdepartment()
+{
+    return this->department;
+}
+string Employee::getName()
+{
+    return this->name;
+}
+string Employee::getDate()
+{
+    return this->date;
+}
+string Employee::getStatus()
+{
+    return this->status;
 }
 
 
-void searchEpl(Epl a[], int code, int n) {
-    Epl arrayFound[MAX];
-    char incode[30];
-    int found = 0;
-    for(int i = 0; i < n; i++) {
-        if(a[i].code==code) {
-            arrayFound[found] = a[i];
-            found++;
+Employee searchEmployee(string file, string id)
+{
+    Employee e;
+    string line;
+    ifstream fileInput(file, ios::in);
+    if (fileInput.is_open())
+    {
+        while (!fileInput.eof())
+        {
+            getline(fileInput, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            if (token == id)
+            {
+                e.setId(id);
+                getline(stm, token, ',');
+                e.setName(token);
+                getline(stm, token, ',');
+                e.setdateofbirth(token);
+                getline(stm, token, ',');
+                e.setAdress(token);
+                getline(stm, token, ',');
+                e.setdepartment(token);
+                getline(stm, token, ',');
+                e.setDate(token);
+                getline(stm, token, ',');
+                e.setStatus(token);
+
+            }
+
         }
+        fileInput.close();
     }
-    showStudent(arrayFound, found);
+    return e;
+}
+int validateDate(string dateofbirth)
+{
+    stringstream ss(dateofbirth);
+    int day, month, year;
+
+    ss >> day >> month >> year;
+
+    if (year >= 1000 && year <= 3000)
+    {
+        if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 0 && day <= 31)
+            return 1;
+        else
+            if (month == 4 || month == 6 || month == 9 || month == 11 && day > 0 && day <= 30)
+                return 1;
+            else
+                if (month == 2)
+                {
+                    if ((year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) && day > 0 && day <= 29)
+                    {
+                        if (day > 0 && day <= 28)
+                            return 1;
+                        else
+                            return 0;
+                    }
+
+                }
+                else
+                    return 0;
+    }
+    else
+        return 0;
+    return 0;
 }
 
-void showStudent(Epl a[], int n) {
-    printLine(100);
-    cout <<"\n\STT\tDate\t        Code\tName\tadress\tpart";
-    for(int i = 0; i < n; i++) {
-        cout<<"\n"<<(i + 1);
-        cout<<"\t"<< a[i].date;
-        cout<<"\t"<<a[i].code;
-        cout<<"\t"<<a[i].name;
-        cout<<"\t"<<a[i].adress;
-        cout<<"\t"<<a[i].part;
+int checkId(string file, string id)
+{
+    string line;
+    ifstream fileInput(file, ios::in);
+    if (fileInput.is_open())
+    {
+        while (!fileInput.eof())
+        {
+            getline(fileInput, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            if (token == id)
+            {
+                return 0;
+            }
+
+        }
+        fileInput.close();
     }
-    printLine(100);
+    return 1;
 }
-int inputFile(Epl a[], char fileName[]) {
-    FILE * fp;
-    int i = 0;
-    fp = fopen (fileName, "r");
-    while (fscanf(fp, "%10s%10d%10s%10s%10s\n",&a[i].date, &a[i].code,&a[i].name,
-                  &a[i].adress,&a[i].part ) != EOF) {
-       i++;
+int checkDate(string file,string id,string date){
+    string line;
+    ifstream fileInput(file, ios::in);
+    Employee e;
+    if (fileInput.is_open())
+    {
+        while (!fileInput.eof())
+        {
+            getline(fileInput, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            if (token == id)
+            {
+                getline(stm, token, ',');
+                e.setDate(token);
+                if(e.getDate().compare(date)==0){
+                    return 0;
+                }
+            }
+
+        }
+        fileInput.close();
     }
-    cout << " The employee number is in the file: " << i << endl;
-    fclose (fp);
-    return i;
+    return 1;
+}
+void writeFileTxt(string file)
+{
+    ofstream myfile(file, ios::app);
+    if (myfile.is_open())
+    {
+        string id;
+        string name, dateofbirth, adress, department;
+
+        cout << "Nhap ma nhan vien (VD: 01): ";
+        cin >> id;
+        while (checkId(file, id) == 0) {
+            cout << "Ma nhan vien bi trung, moi ban nhap lai:  \n";
+            cout << "Nhap ma nhan vien: ";
+            cin >> id;
+        }
+
+        cout << "Nhap ten: ";
+        cin.ignore();
+        getline(cin, name);
+
+        cout << "Nhap ngay thang nam sinh: ";
+        getline(cin, dateofbirth);
+        while (validateDate(dateofbirth) == 0)
+        {
+            cout << "Ban chua nhap dung dinh dang ngay thang, VD: 14 5 1999 \n";
+            cout << "Nhap ngay thang nam sinh: ";
+            getline(cin, dateofbirth);
+        }
+
+        cout << "Nhap dia chi: ";
+        getline(cin, adress);
+        while (adress.empty())
+        {
+            cout << "Khong duoc bo trong dia chi \n";
+            cout << "Moi ban nhap lai dia chi \n";
+            getline(cin, adress);
+        }
+
+        cout << "Nhap bo phan cong tac: ";
+        getline(cin, department);
+        while (department.empty())
+        {
+            cout << "Khong duoc bo trong bo phan cong tac \n";
+            cout << "Moi ban nhap lai bo phan cong tac \n";
+            cin >> department;
+        }
+        cout << "-------------------------------------------------" << endl;
+        myfile << id << "," << name << "," << dateofbirth << "," << adress << "," << department << endl;
+
+        myfile.close();
+    }
+    else cout << "Khong the mo duoc file" << endl;
+
 }
 
-void outputFile(Epl a[], int n, char fileName[]) {
-    FILE * fp;
-    fp = fopen (fileName,"w");
-    for(int i = 0;i < n;i++){
-        fprintf(fp, "%10s%10d%10s%10s%10s\n",a[i].date, a[i].code,
-            a[i].name,a[i].adress,a[i].part);
-    }
-    fclose (fp);
+
+
+void print(Employee e)
+{
+    cout << "Ma NV: " << e.getId() << endl;
+    cout << "Ten NV: " << e.getName() << endl;
+    cout << "Ngay thang nam sinh: " << e.getdateofbirth() << endl;
+    cout << "Dia chi: " << e.getAdress() << endl;
+    cout << "Bo phan cong tac: " << e.getdepartment() << endl;
+    cout << "Ngay di lam: " << e.getDate() << endl;
+    cout << "Trang thai: " << e.getStatus() << endl;
+
+
 }
 
-void printLine(int n) {
-    cout << endl;
-    for (int i = 0; i < n; i++) {
-        cout << "_";
+int checkStatus(string status){
+    if(status.compare("DL")==0||status.compare("DLNN")==0||status.compare("N")==0||status.compare("NP")==0){
+        return 1;
     }
-    cout << endl;
+    return 0;
 }
 
+
+Employee searchChamcong(string file, string id)
+{
+    Employee e;
+    int dl=0;
+    int dlnn=0;
+    int n=0;
+    int np =0;
+    string line;
+    ifstream fileInput(file, ios::in);
+    if (fileInput.is_open())
+    {
+        while (!fileInput.eof())
+        {
+            getline(fileInput, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            if (token == id)
+            {
+                e.setId(id);
+                getline(stm, token, ',');
+                e.setDate(token);
+                getline(stm, token, ',');
+                e.setStatus(token);
+                if(e.getStatus().compare("DL")==0){
+                    dl++;
+                }else if (e.getStatus().compare("DLNN")==0) {
+                    dlnn++;
+                }else if (e.getStatus().compare("N")==0) {
+                    n++;
+                }else if (e.getStatus().compare("NP")==0) {
+                    np++;
+                }
+            }
+
+        }
+        fileInput.close();
+    }
+    cout<<"Ma nhan vien :"<<id<<" |"<<"DL :"<<dl<<" |"<<"DLNN :"<<dlnn<<" |"<<"N :"<<n<<" |"<<"NP :"<<np<<"\n";
+}
 void pressAnyKey() {
     cout << "\n\nPress any key to continue...";
     getch();
