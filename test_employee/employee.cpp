@@ -196,8 +196,7 @@ int checkDate(string file,string id,string date){
             if (token == id)
             {
                 getline(stm, token, ',');
-                e.setDate(token);
-                if(e.getDate().compare(date)==0){
+                if(token.compare(date)==0){
                     return 0;
                 }
             }
@@ -276,17 +275,23 @@ void print(Employee e)
 
 
 }
-void readCSV(string file){
+int checkStatus(string status){
+    if(status.compare("DL")==0||status.compare("DLNN")==0||status.compare("N")==0||status.compare("NP")==0){
+        return 1;
+    }
+    return 0;
+}
+void importCSV(string fileCSV,string fileImport){
     Employee e[10000];
     Employee employee;
-    ifstream inFile(file, ios::in);
+    ifstream inFile(fileCSV, ios::in);
+    ofstream myfile(fileImport, ios::app);
     string line;
     int linenum = 0;
     while (getline (inFile, line))
     {
         istringstream linestream(line);
         string item;
-        //use this to get up to the first comma
         getline(linestream, item, ',');
         employee.setId(item);
         getline(linestream, item, ',');
@@ -299,16 +304,35 @@ void readCSV(string file){
         employee.setdepartment(item);
         e[linenum] = employee;
         linenum++;
-    }
-    for (int i=0;i<linenum;i++) {
-        cout<<"\n"<<e[i].getId()<<setw(30)<<e[i].getName()<<setw(25)<<e[i].getdateofbirth()<<setw(35)<<e[i].getAdress()<<setw(20)<<e[i].getdepartment()<<"\n";
+        myfile << employee.getId() << "," << employee.getdateofbirth() << "," << employee.getName()<< "," << employee.getAdress()<< "," << employee.getdepartment() << endl;
     }
 }
-int checkStatus(string status){
-    if(status.compare("DL")==0||status.compare("DLNN")==0||status.compare("N")==0||status.compare("NP")==0){
-        return 1;
+void readTxt(string file){
+    Employee e;
+    string line;
+    ifstream fileInput(file, ios::in);
+    if (fileInput.is_open())
+    {
+        while (!fileInput.eof())
+        {
+            getline(fileInput, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            e.setId(token);
+            getline(stm, token, ',');
+            e.setName(token);
+            getline(stm, token, ',');
+            e.setdateofbirth(token);
+            getline(stm, token, ',');
+            e.setAdress(token);
+            getline(stm, token, ',');
+            e.setdepartment(token);
+        }
+        fileInput.close();
     }
-    return 0;
+    cout<<e.getId();
 }
 
 void writeFileCsv(string file)
@@ -327,9 +351,9 @@ void writeFileCsv(string file)
         }
         cout << "Nhap ngay thang nam di lam: \n";
         getline(cin, date);
-        while (validateDate(date) == 0 || checkDate("ImportData.csv",id,date)==0)
+        while (validateDate(date) == 0 || checkDate("chamcong.txt",id,date)==0)
         {
-            cout << "Moi nhap lai: ";
+            cout << "Nhap ngay thang nam di lam: ";
             getline(cin, date);
         }
 
@@ -356,6 +380,7 @@ Employee searchChamcong(string file, string id)
     int n=0;
     int np =0;
     string line;
+    ifstream fileInput2("ImportData.csv", ios::in);
     ifstream fileInput(file, ios::in);
     if (fileInput.is_open())
     {
@@ -387,7 +412,25 @@ Employee searchChamcong(string file, string id)
         }
         fileInput.close();
     }
-    cout<<"Ma nhan vien :"<<id<<" |"<<"DL :"<<dl<<" |"<<"DLNN :"<<dlnn<<" |"<<"N :"<<n<<" |"<<"NP :"<<np<<"\n";
+    if (fileInput2.is_open())
+    {
+        while (!fileInput2.eof())
+        {
+            getline(fileInput2, line);
+            string epl = line;
+            istringstream stm(epl);
+            string token;
+            getline(stm, token, ',');
+            if (token == id)
+            {
+                getline(stm, token, ',');
+                e.setName(token);
+             }
+
+        }
+        fileInput.close();
+    }
+    cout<<"Ma nhan vien :"<<id<<" |"<<"Name :"<<e.getName()<<" |"<<"DL :"<<dl<<" |"<<"DLNN :"<<dlnn<<" |"<<"N :"<<n<<" |"<<"NP :"<<np<<"\n";
 }
 void pressAnyKey() {
     cout << "\n\nPress any key to continue...";
