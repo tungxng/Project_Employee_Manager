@@ -206,6 +206,23 @@ int checkDate(string file,string id,string date){
     }
     return 1;
 }
+int checkDating(string date){
+    stringstream ss(date);
+    int day, month, year;
+    int thisday, thismonth, thisyear;
+    ss >> day >> month >> year;
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    thisyear = 1900 + ltm->tm_year;
+    thismonth =1 + ltm->tm_mon;
+    thisday =ltm->tm_mday;
+    if(year == thisyear && month==thismonth){
+        if(day<=thisday){
+            return 1;
+        }
+    }
+    return 0;
+}
 void writeFileTxt(string file)
 {
     ofstream myfile(file, ios::app);
@@ -281,61 +298,8 @@ int checkStatus(string status){
     }
     return 0;
 }
-void importCSV(string fileCSV,string fileImport){
-    Employee e[10000];
-    Employee employee;
-    ifstream inFile(fileCSV, ios::in);
-    ofstream myfile(fileImport, ios::app);
-    string line;
-    int linenum = 0;
-    while (getline (inFile, line))
-    {
-        istringstream linestream(line);
-        string item;
-        getline(linestream, item, ',');
-        employee.setId(item);
-        getline(linestream, item, ',');
-        employee.setName(item);
-        getline(linestream, item, ',');
-        employee.setdateofbirth(item);
-        getline(linestream, item, ',');
-        employee.setAdress(item);
-        getline(linestream, item, ',');
-        employee.setdepartment(item);
-        e[linenum] = employee;
-        linenum++;
-        myfile << employee.getId() << "," << employee.getdateofbirth() << "," << employee.getName()<< "," << employee.getAdress()<< "," << employee.getdepartment() << endl;
-    }
-}
-void readTxt(string file){
-    Employee e;
-    string line;
-    ifstream fileInput(file, ios::in);
-    if (fileInput.is_open())
-    {
-        while (!fileInput.eof())
-        {
-            getline(fileInput, line);
-            string epl = line;
-            istringstream stm(epl);
-            string token;
-            getline(stm, token, ',');
-            e.setId(token);
-            getline(stm, token, ',');
-            e.setName(token);
-            getline(stm, token, ',');
-            e.setdateofbirth(token);
-            getline(stm, token, ',');
-            e.setAdress(token);
-            getline(stm, token, ',');
-            e.setdepartment(token);
-        }
-        fileInput.close();
-    }
-    cout<<e.getId();
-}
 
-void writeFileCsv(string file)
+void inputAttendance(string file)
 {
     ofstream myfile(file, ios::app);
     if (myfile.is_open())
@@ -350,11 +314,19 @@ void writeFileCsv(string file)
             cin >> id;
         }
         cout << "Nhap ngay thang nam di lam: \n";
-        getline(cin, date);
-        while (validateDate(date) == 0 || checkDate("chamcong.txt",id,date)==0)
+        while (validateDate(date) == 0)
         {
-            cout << "Nhap ngay thang nam di lam: ";
             getline(cin, date);
+            while (checkDate("chamcong.txt",id,date)==0)
+            {
+                cout<<"Ngay nhap da ton tai,moi ban nhap lai \n";
+                getline(cin, date);
+                if(checkDating(date)==0){
+                    cout<<"Ngay nhap khong hop le,moi ban nhap lai\n";
+                    getline(cin, date);
+
+                }
+            }
         }
 
         cout << "Nhap trang thai : \n";
@@ -372,7 +344,7 @@ void writeFileCsv(string file)
     }
 
 }
-Employee searchChamcong(string file, string id)
+Employee searchAttendance(string file, string id)
 {
     Employee e;
     int dl=0;
