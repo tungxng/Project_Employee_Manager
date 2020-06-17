@@ -56,7 +56,7 @@ int main()
         case 3:
         {
             cout << "Danh sach nhan vien  : \n";
-            readCSV(fileDataCSV);
+
         }
 
             pressAnyKey();
