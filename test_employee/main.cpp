@@ -56,9 +56,22 @@ int main()
         case 3:
         {
             cout << "Danh sach nhan vien  : \n";
-            readCSV(fileDataCSV);
+
         }
 
+            pressAnyKey();
+            break;
+        case 4:
+        {
+            cout << "Cham cong nhan vien theo ma nhan vien: \n";
+            int n;
+            cout<<"Nhap so nhan vien muon cham cong :";
+            cin>>n;
+            for(int i=0;i<n;i++){
+                cout<<"Nhan vien thu :"<<i+1<<"\n";
+                inputAttendance(fileCSV);
+            }
+        }
             pressAnyKey();
             break;
         case 5:
@@ -73,23 +86,11 @@ int main()
                 cin >> id;
             }
 
-            searchChamcong(fileCSV,id);
+            searchAttendance(fileCSV,id);
         }
             pressAnyKey();
             break;
-        case 4:
-        {
-            cout << "Cham cong nhan vien theo ma nhan vien: \n";
-            int n;
-            cout<<"Nhap so nhan vien muon cham cong :";
-            cin>>n;
-            for(int i=0;i<n;i++){
-                cout<<"Nhan vien thu :"<<i+1<<"\n";
-                writeFileCsv(fileCSV);
-            }
-        }
-            pressAnyKey();
-            break;
+
         case 0:
             cout << "\nBan da thoat chuong trinh!";
             getch();
